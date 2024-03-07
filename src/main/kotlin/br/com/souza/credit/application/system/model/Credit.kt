@@ -3,8 +3,7 @@ package br.com.souza.credit.application.system.model
 import br.com.souza.credit.application.system.enumeration.Status
 import jakarta.persistence.*
 import java.math.BigDecimal
-import java.util.Locale
-import java.util.UUID
+import java.util.*
 
 @Entity
 data class Credit(
@@ -16,5 +15,5 @@ data class Credit(
     @Column(nullable = false) val dayFirstInstallment: Locale,
     @Column(nullable = false) val numberOfInstallment: Int = 0,
     @Enumerated val status: Status = Status.IN_PROGRESS,
-    @ManyToOne val customer: Customer? = null
+    @ManyToOne var customer: Customer? = null
 )
