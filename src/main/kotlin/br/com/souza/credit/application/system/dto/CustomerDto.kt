@@ -2,17 +2,21 @@ package br.com.souza.credit.application.system.dto
 
 import br.com.souza.credit.application.system.model.Address
 import br.com.souza.credit.application.system.model.Customer
+import jakarta.validation.constraints.Email
+import jakarta.validation.constraints.NotEmpty
+import jakarta.validation.constraints.NotNull
+import org.hibernate.validator.constraints.br.CPF
 import java.math.BigDecimal
 
 data class CustomerDto(
-    val firstName : String,
-    val lastName: String,
-    val cpf: String,
-    val income: BigDecimal,
-    val email: String,
-    val password: String,
-    val zipCode: String,
-    val street: String
+   @field:NotEmpty val firstName : String,
+   @field:NotEmpty val lastName: String,
+   @field:NotEmpty @CPF val cpf: String,
+    @field:NotNull val income: BigDecimal,
+   @field:NotEmpty @Email val email: String,
+   @field:NotEmpty val password: String,
+   @field:NotEmpty val zipcode: String,
+   @field:NotEmpty val street: String
 
 ) {
     fun toEntity() : Customer = Customer(
@@ -23,7 +27,7 @@ data class CustomerDto(
         email = this.email,
         password = this.password,
         address = Address(
-            zipCode = this.zipCode,
+            zipcode = this.zipcode,
             street = this.street
         )
     )

@@ -4,6 +4,9 @@ import br.com.souza.credit.application.system.dto.CustomerDto
 import br.com.souza.credit.application.system.dto.CustomerUpdateDto
 import br.com.souza.credit.application.system.dto.CustomerView
 import br.com.souza.credit.application.system.service.impl.CustomerService
+import jakarta.validation.Valid
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -13,25 +16,25 @@ class CustomerController(
 ) {
 
     @PostMapping
-    fun saveCustomer(@RequestBody customerDto: CustomerDto): String {
+    fun saveCustomer(@RequestBody @Valid customerDto: CustomerDto): ResponseEntity<String> {
         val savedCustomer = this.service.save(customerDto.toEntity())
-        return "Customer ${savedCustomer.email} saved!"
+        return ResponseEntity.status(HttpStatus.CREATED).body( "Customer ${savedCustomer.email} saved!")
 
     }
 
     @GetMapping("/{id}")
-    fun findById( @PathVariable id: Long) : CustomerView {
+    fun findById( @PathVariable id: Long): ResponseEntity<CustomerView> {
         val customer = this.service.findById(id)
-        return CustomerView(customer)
+        return ResponseEntity.status(HttpStatus.OK).body(CustomerView(customer))
     }
 
     @PatchMapping
     fun updateCustomer(@RequestParam(value = "customerId") id: Long,
-                       @RequestBody customerUpdateDto: CustomerUpdateDto): CustomerView {
+                       @RequestBody @Valid customerUpdateDto: CustomerUpdateDto): ResponseEntity<CustomerView> {
         val customer = this.service.findById(id)
         val customerToUpdate = customerUpdateDto.toEntity(customer)
         val customerUpdated = this.service.save(customerToUpdate)
-        return CustomerView(customerUpdated)
+        return ResponseEntity.status(HttpStatus.OK).body(CustomerView(customerUpdated))
     }
 
     @DeleteMapping("/{id}")
